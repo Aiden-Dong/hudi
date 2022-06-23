@@ -279,7 +279,8 @@ public abstract class BaseHoodieTableFileIndex {
 
     validate(activeTimeline, queryInstant);
 
-    if (tableType.equals(HoodieTableType.MERGE_ON_READ) && queryType.equals(HoodieTableQueryType.SNAPSHOT)) {
+    if (tableType.equals(HoodieTableType.MERGE_ON_READ) && queryType.equals(HoodieTableQueryType.SNAPSHOT)
+        || (queryType.equals(HoodieTableQueryType.READ_OPTIMIZED))) {
       cachedAllInputFileSlices = partitionFiles.keySet().stream()
           .collect(Collectors.toMap(
               Function.identity(),
