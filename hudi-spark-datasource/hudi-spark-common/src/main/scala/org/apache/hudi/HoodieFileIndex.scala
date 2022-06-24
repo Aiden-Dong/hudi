@@ -18,6 +18,7 @@
 package org.apache.hudi
 
 import org.apache.hadoop.fs.{FileStatus, Path}
+import org.apache.hudi.DataSourceReadOptions.QUERY_TYPE
 import org.apache.hudi.HoodieDatasetUtils.withPersistence
 import org.apache.hudi.HoodieFileIndex.{DataSkippingFailureMode, collectReferencedColumns, getConfigProperties}
 import org.apache.hudi.common.config.{HoodieMetadataConfig, TypedProperties}
@@ -303,6 +304,7 @@ object HoodieFileIndex extends Logging {
       sqlConf.getConfString(HoodieMetadataConfig.ENABLE.key(),
         HoodieMetadataConfig.DEFAULT_METADATA_ENABLE_FOR_READERS.toString))
     properties.putAll(options.filter(p => p._2 != null).asJava)
+    properties.put(QUERY_TYPE.key, DataSourceReadOptions.QUERY_TYPE_SNAPSHOT_OPT_VAL)
     properties
   }
 
