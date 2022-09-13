@@ -199,7 +199,7 @@ public abstract class HoodieClientTestHarness extends HoodieCommonTestHarness im
 
     if (sparkSessionExtensionsInjector.isPresent()) {
       // In case we need to inject extensions into Spark Session, we have
-      // to stop any session that might still be active and since Spark will try
+      // to stop any session that might still be active, since Spark will try
       // to re-use it
       HoodieConversionUtils.toJavaOption(SparkSession.getActiveSession())
           .ifPresent(SparkSession::stop);
@@ -341,8 +341,12 @@ public abstract class HoodieClientTestHarness extends HoodieCommonTestHarness im
   }
 
   protected Properties getPropertiesForKeyGen() {
+    return getPropertiesForKeyGen(false);
+  }
+
+  protected Properties getPropertiesForKeyGen(boolean populateMetaFields) {
     Properties properties = new Properties();
-    properties.put(HoodieTableConfig.POPULATE_META_FIELDS.key(), "false");
+    properties.put(HoodieTableConfig.POPULATE_META_FIELDS.key(), String.valueOf(populateMetaFields));
     properties.put("hoodie.datasource.write.recordkey.field", "_row_key");
     properties.put("hoodie.datasource.write.partitionpath.field", "partition_path");
     properties.put(HoodieTableConfig.RECORDKEY_FIELDS.key(), "_row_key");
@@ -433,7 +437,7 @@ public abstract class HoodieClientTestHarness extends HoodieCommonTestHarness im
   protected void cleanupDFS() throws IOException {
     if (hdfsTestService != null) {
       hdfsTestService.stop();
-      dfsCluster.shutdown();
+      dfsCluster.shutdown(true, true);
       hdfsTestService = null;
       dfsCluster = null;
       dfs = null;
