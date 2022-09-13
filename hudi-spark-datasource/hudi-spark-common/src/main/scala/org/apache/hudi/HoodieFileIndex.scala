@@ -304,7 +304,6 @@ object HoodieFileIndex extends Logging {
       sqlConf.getConfString(HoodieMetadataConfig.ENABLE.key(),
         HoodieMetadataConfig.DEFAULT_METADATA_ENABLE_FOR_READERS.toString))
     properties.putAll(options.filter(p => p._2 != null).asJava)
-    properties.put(QUERY_TYPE.key, DataSourceReadOptions.QUERY_TYPE_SNAPSHOT_OPT_VAL)
     properties
   }
 
